@@ -75,19 +75,22 @@ class RsaSignatureTest(TestCase):
         res = self.signature.sign("Hello world!")
         self.assertEqual(
             res,
-            "huYW7D7950we5xdr9U1mMV8Q4FgOqgioMDvWbtglZKBivkgXolNnIY+wb6xx3kYXKaR2lIzGW7j8cXDFdlt4OCGkcixaaUCN0V5r4nBz6hpK+BcV9EFtKTV8DScDbMtLm16ziewZR3QsSXQJMDWUHrqZWep+QnM9JwKqPDtxK197Wuz4nmWu5HrSeaV0WK9gGmVDqJIaRJVVq3zvGh6+27sfwR/Xc+27IfgUsaE5Hkb2ZD4jWNUshMyDDBex81UDCd2Lgrk9vkKcdq4Y+oGJWcqBUlRgVajqmm8JktoUSLrcvz4OoOgFsJcbz/wrBfpmc2GngYdcbuO5GEEHgV+DTQ=="
+            helpers.to_bytes(
+                "huYW7D7950we5xdr9U1mMV8Q4FgOqgioMDvWbtglZKBivkgXolNnIY+wb6xx3kYXKaR2lIzGW7j8cXDFdlt4OCGkcixaaUCN0V5r4nBz6hpK+BcV9EFtKTV8DScDbMtLm16ziewZR3QsSXQJMDWUHrqZWep+QnM9JwKqPDtxK197Wuz4nmWu5HrSeaV0WK9gGmVDqJIaRJVVq3zvGh6+27sfwR/Xc+27IfgUsaE5Hkb2ZD4jWNUshMyDDBex81UDCd2Lgrk9vkKcdq4Y+oGJWcqBUlRgVajqmm8JktoUSLrcvz4OoOgFsJcbz/wrBfpmc2GngYdcbuO5GEEHgV+DTQ==")
         )
 
     def test_verify(self):
         res = self.signature.verify(
             "Hello world!",
-            "huYW7D7950we5xdr9U1mMV8Q4FgOqgioMDvWbtglZKBivkgXolNnIY+wb6xx3kYXKaR2lIzGW7j8cXDFdlt4OCGkcixaaUCN0V5r4nBz6hpK+BcV9EFtKTV8DScDbMtLm16ziewZR3QsSXQJMDWUHrqZWep+QnM9JwKqPDtxK197Wuz4nmWu5HrSeaV0WK9gGmVDqJIaRJVVq3zvGh6+27sfwR/Xc+27IfgUsaE5Hkb2ZD4jWNUshMyDDBex81UDCd2Lgrk9vkKcdq4Y+oGJWcqBUlRgVajqmm8JktoUSLrcvz4OoOgFsJcbz/wrBfpmc2GngYdcbuO5GEEHgV+DTQ=="
+            helpers.to_bytes(
+                "huYW7D7950we5xdr9U1mMV8Q4FgOqgioMDvWbtglZKBivkgXolNnIY+wb6xx3kYXKaR2lIzGW7j8cXDFdlt4OCGkcixaaUCN0V5r4nBz6hpK+BcV9EFtKTV8DScDbMtLm16ziewZR3QsSXQJMDWUHrqZWep+QnM9JwKqPDtxK197Wuz4nmWu5HrSeaV0WK9gGmVDqJIaRJVVq3zvGh6+27sfwR/Xc+27IfgUsaE5Hkb2ZD4jWNUshMyDDBex81UDCd2Lgrk9vkKcdq4Y+oGJWcqBUlRgVajqmm8JktoUSLrcvz4OoOgFsJcbz/wrBfpmc2GngYdcbuO5GEEHgV+DTQ==")
         )
         self.assertEqual(res, True)
 
         res = self.signature.verify(
             "Hello wrong world!",
-            "huYW7D7950we5xdr9U1mMV8Q4FgOqgioMDvWbtglZKBivkgXolNnIY+wb6xx3kYXKaR2lIzGW7j8cXDFdlt4OCGkcixaaUCN0V5r4nBz6hpK+BcV9EFtKTV8DScDbMtLm16ziewZR3QsSXQJMDWUHrqZWep+QnM9JwKqPDtxK197Wuz4nmWu5HrSeaV0WK9gGmVDqJIaRJVVq3zvGh6+27sfwR/Xc+27IfgUsaE5Hkb2ZD4jWNUshMyDDBex81UDCd2Lgrk9vkKcdq4Y+oGJWcqBUlRgVajqmm8JktoUSLrcvz4OoOgFsJcbz/wrBfpmc2GngYdcbuO5GEEHgV+DTQ=="
+            helpers.to_bytes(
+                "huYW7D7950we5xdr9U1mMV8Q4FgOqgioMDvWbtglZKBivkgXolNnIY+wb6xx3kYXKaR2lIzGW7j8cXDFdlt4OCGkcixaaUCN0V5r4nBz6hpK+BcV9EFtKTV8DScDbMtLm16ziewZR3QsSXQJMDWUHrqZWep+QnM9JwKqPDtxK197Wuz4nmWu5HrSeaV0WK9gGmVDqJIaRJVVq3zvGh6+27sfwR/Xc+27IfgUsaE5Hkb2ZD4jWNUshMyDDBex81UDCd2Lgrk9vkKcdq4Y+oGJWcqBUlRgVajqmm8JktoUSLrcvz4OoOgFsJcbz/wrBfpmc2GngYdcbuO5GEEHgV+DTQ==")
         )
         self.assertEqual(res, False)
 

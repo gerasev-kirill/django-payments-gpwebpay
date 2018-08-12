@@ -49,7 +49,7 @@ class RsaSignature(object):
     def verify(self, data, signature):
         try:
             signature = b64decode(signature)
-        except TypeError:
+        except:
             return False
         try:
             OpenSSL.crypto.verify(

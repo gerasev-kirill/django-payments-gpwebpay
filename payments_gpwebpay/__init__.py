@@ -11,15 +11,6 @@ from .forms import ProcessPaymentForm
 from .helpers import to_bytes, RsaSignature
 
 
-GP_QUERY_PARAMS = [
-    'MERCHANTNUMBER', 'OPERATION', 'ORDERNUMBER'
-    'AMOUNT', 'CURRENCY', 'DEPOSITFLAG'
-    'MERORDERNUM', 'URL', 'DESCRIPTION',
-    'MD', 'DIGEST', 'DIGEST1'
-    'PRCODE', 'SRCODE', 'RESULTTEXT'
-]
-
-
 def normalize_url(url):
     _url = url.split('?')
     if _url[0][-1] == '/':
@@ -81,21 +72,21 @@ class GpwebpayProvider(BasicProvider):
     def get_action(self, payment):
         return self.endpoint
 
-    def get_currency(self, currencyCode):
+    def get_currency(self, code):
         codes = {
             'CZK': 203, 'EUR': 978,
             'USD': 840, 'GBP': 826,
             'PLN': 985, 'HUF': 348,
             'LVL': 428
         }
-        currencyCode = currencyCode.upper()
-        if currencyCode not in codes:
+        code = code.upper()
+        if code not in codes:
             raise ValueError(
                 "Currency '%s' is not allowed for GpWebPay provider!" % (
-                    currencyCode
+                    code
                 )
             )
-        return codes[currencyCode]
+        return codes[code]
 
     def get_price(self, price):
         if not price:
@@ -152,6 +143,6 @@ class GpwebpayProvider(BasicProvider):
         )
         if not form.is_valid():
             cleaned_data = getattr(form, 'cleaned_data', None) or {}
-            return HttpResponseForbidden('<PaymentNotification>Rejected</PaymentNotification>' + str(form.errors))
+            return HttpResponseForbidden('<PaymentNotification>Rejected</PaymentNotification>')
         form.save()
         return HttpResponse('<PaymentNotification>Accepted</PaymentNotification>')
