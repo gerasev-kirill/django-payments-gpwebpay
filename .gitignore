@@ -1,0 +1,11 @@
+dist
+*.egg-info
+*.pyc
+*.pyo
+ap2
+ap3
+*.sqlite3
+.*
+!.gitignore
+!.travis.yml
+__pycache__
