@@ -29,6 +29,21 @@ def generate_digest(query_params, fields):
     ])
 
 
+def add_params_to_url(url, params):
+    try:
+        import urlparse
+        from urllib import urlencode
+    except:  # For Python 3
+        import urllib.parse as urlparse
+        from urllib.parse import urlencode
+
+    url_parts = list(urlparse.urlparse(url))
+    query = dict(urlparse.parse_qsl(url_parts[4]))
+    query.update(params)
+    url_parts[4] = urlencode(query)
+    return urlparse.urlunparse(url_parts)
+
+
 class RsaSignature(object):
 
     def __init__(self, private_key, public_key, passphrase):

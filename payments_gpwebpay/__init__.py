@@ -4,7 +4,7 @@ import hashlib
 import hmac
 import six
 from django.utils.translation import get_language
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 
 from payments.core import BasicProvider
 from .forms import ProcessPaymentForm
@@ -26,6 +26,7 @@ class GpwebpayProvider(BasicProvider):
         self.private_key = kwargs.pop('private_key', None)
         self.public_key = kwargs.pop('public_key', None)
         self.passphrase_for_key = kwargs.pop('passphrase_for_key', None)
+        self.use_redirect = kwargs.pop('use_redirect', True)
 
         self.language = kwargs.pop('language', None)
         self.operation_description = kwargs.pop('operation_description', None)
@@ -143,6 +144,24 @@ class GpwebpayProvider(BasicProvider):
         )
         if not form.is_valid():
             cleaned_data = getattr(form, 'cleaned_data', None) or {}
-            return HttpResponseForbidden('<PaymentNotification>Rejected</PaymentNotification>')
+            if self.use_redirect:
+                url = payment.get_failure_url()
+                params = {
+                    'errorPrCode': cleaned_data['PRCODE']
+                }
+                if cleaned_data.get('SRCODE', None):
+                    params['errorSrCode'] = cleaned_data['SRCODE']
+                if cleaned_data.get('RESULTTEXT', None):
+                    params['errorText'] = cleaned_data['RESULTTEXT']
+                url = helpers.add_params_to_url(
+                    payment.get_failure_url(),
+                    params
+                )
+                return HttpResponseRedirect(url)
+            else:
+                return HttpResponseForbidden('<PaymentNotification>Rejected</PaymentNotification>')
         form.save()
+        if self.use_redirect:
+            url = payment.get_success_url()
+            return HttpResponseRedirect(payment.get_success_url())
         return HttpResponse('<PaymentNotification>Accepted</PaymentNotification>')

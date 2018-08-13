@@ -47,6 +47,7 @@ with open(os.path.join(FIXTURE_DIR, 'gpwebpay_credentials.json')) as f:
     GPWEBPAY_CREDENTIALS = json.load(f)
 
 GPWEBPAY_CREDENTIALS['sandbox'] = True
+GPWEBPAY_CREDENTIALS['use_redirect'] = False
 
 
 PAYMENT_VARIANTS = {
