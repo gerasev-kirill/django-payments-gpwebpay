@@ -115,7 +115,7 @@ class GpwebpayProvider(BasicProvider):
             'MERORDERNUM': order_id,
             'AMOUNT': self.get_price(payment.total),
             'CURRENCY': self.get_currency(payment.currency),
-            'DEPOSITFLAG': 0,
+            'DEPOSITFLAG': 1,
             'URL': self.get_return_url(payment),
             'LANG': self.get_language(),
             'MD': "PAYMENT-%s;%s;%s" % (
