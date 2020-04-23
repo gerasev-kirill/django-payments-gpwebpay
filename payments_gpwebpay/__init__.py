@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import hashlib
-import hmac
-import six
 from django.utils.translation import get_language
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 
 from payments.core import BasicProvider
 from .forms import ProcessPaymentForm
-from .helpers import to_bytes, RsaSignature
+from . import helpers
 
 
 def normalize_url(url):
@@ -52,7 +49,7 @@ class GpwebpayProvider(BasicProvider):
                 'GpWebPay provider does not support pre-authorization.'
             )
 
-        self.signature = RsaSignature(
+        self.signature = helpers.RsaSignature(
             self.private_key,
             self.public_key,
             self.passphrase_for_key
@@ -126,7 +123,6 @@ class GpwebpayProvider(BasicProvider):
         }
         if payment.description or self.operation_description:
             data['DESCRIPTION'] = payment.description or self.operation_description
-
         digest = helpers.generate_digest(data, [
             'MERCHANTNUMBER', 'OPERATION', 'ORDERNUMBER',
             'AMOUNT', 'CURRENCY', 'DEPOSITFLAG', 'MERORDERNUM',
