@@ -16,7 +16,7 @@ def normalize_url(url):
 
 
 class GpwebpayProvider(BasicProvider):
-    _method = 'get'
+    _method = 'post'
 
     def __init__(self, *args, **kwargs):
         self.merchant_id = kwargs.pop('merchant_id', None)
@@ -128,7 +128,7 @@ class GpwebpayProvider(BasicProvider):
             'AMOUNT', 'CURRENCY', 'DEPOSITFLAG', 'MERORDERNUM',
             'URL', 'DESCRIPTION', 'MD'
         ])
-        data['DIGEST'] = self.signature.sign(digest)
+        data['DIGEST'] = helpers.to_str(self.signature.sign(digest))
         return data
 
     def process_data(self, payment, request):

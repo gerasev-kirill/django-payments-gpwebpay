@@ -13,6 +13,8 @@ def to_bytes(data):
 
 
 def to_str(data):
+    if isinstance(data, bytes):
+        return data.decode('utf-8')
     if not isinstance(data, six.text_type) and not isinstance(data, six.string_types):
         return "%s" % data
     return data
@@ -27,6 +29,15 @@ def generate_digest(query_params, fields):
         to_str(d)
         for d in digest
     ])
+
+'''
+def generate_addinfo(params):
+    lines = []
+    return '<?xml version=\"1.0\" encoding=\"UTF-8\"?>' + \
+           '<additionalInfoRequest xmlns=\"http://gpe.cz/gpwebpay/additionalInfo/request\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"2.0\">' + \
+            ''.join(lines) + \
+           '</additionalInfoRequest>'
+'''
 
 
 def add_params_to_url(url, params):
